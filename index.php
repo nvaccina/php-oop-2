@@ -4,14 +4,10 @@ include 'models/Gioco.php';
 include 'models/Cuccia.php';
 include 'models/Cibo.php';
 
+require_once __DIR__ . "/DB/db.php";
 
-$orsetto_peluche = new Gioco('Orsetto Peluche', 20, 'link-gioco', 'gatto', 'peluche');
-$cuccia2 = new Cuccia ('Cuccia esterna per Cani Eco Lodge', 80, 'link-cuccia', 'cane', 'Cuccia Large: 99x70x75h');
-$crocchette_salm_cane = new Cuccia ('Crocchette di salmone', 45, 'link-crocchette', 'cane', 'Salmone');
 
-var_dump($orsetto_peluche );
-var_dump($cuccia2 );
-var_dump($crocchette_salm_cane );
+
 ?>
 
 
@@ -28,23 +24,37 @@ var_dump($crocchette_salm_cane );
   <title>PET SHOP</title>
 </head>
 <body>
-  <div class="container text-center py-5">
-    <h1>PET SHOP</h1>
+  
+  <div class="container py-5">
+    <h1 class="text-center pb-2">PET SHOP</h1>
+    <hr>
 
-    <div class="card" style="width: 18rem;">
-      <img src="..." class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text"></p>
-        
-      </div>
+    <div class="d-flex flex-wrap justify-content-center pt-5">
+
+      <?php foreach($listProducts as $product): ?>
+
+        <div class="card mx-2 mb-4" style="width: 18rem; cursor: pointer;">
+          <img src="img/<?php echo $product->image ?>.jpg" class="card-img-top" style="height: 300px;" alt="<?php echo $product->title ?>">
+          <div class="card-body border-top border-1"">
+            <h5 class="card-title text-center"><?php echo $product->title ?></h5>
+            <p class="card-text mb-0"><?php echo $product->getInfo() ?></p>
+
+            <p class="card-text">
+              <?php 
+                echo match($product->type) {
+                  'Gioco'  => $product->getMaterial(),
+                  'Cuccia' => $product->getcucciaInfo(),
+                  'Cibo'   => $product->getComposition(),
+                }
+              ?>
+            </p>
+          </div>
+        </div>
+      <?php endforeach; ?>
+
     </div>
   </div>
-  
 
-  <ul>
-    <li><?php echo $cuccia2->getCategory() ?></li>
-  </ul>
   
 </body>
 </html>
